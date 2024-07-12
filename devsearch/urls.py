@@ -17,7 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.conf import settings # we want access to our setting file to find the media root and url
+from django.conf.urls.static import static # It's going to heko us create a url for the static file
+
 urlpatterns = [
     path('admin/', admin.site.urls), # We cannot access it until we have the database ready
     path('', include('projects.urls'))
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

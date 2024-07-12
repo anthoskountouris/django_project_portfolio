@@ -5,6 +5,8 @@ import uuid #16 char string of numbers and letters
 class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(null = True, blank=True) # Can leave it empty (database, django) to know
+    featured_image = models.ImageField(
+        null=True, blank=True, default="default.jpg")
     demo_link = models.CharField(max_length = 2000, null = True, blank = True)
     source_link = models.CharField(max_length = 2000, null = True, blank = True)
     tags = models.ManyToManyField('Tag', blank = True) # In string to be able to add it 
