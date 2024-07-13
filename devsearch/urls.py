@@ -22,7 +22,8 @@ from django.conf.urls.static import static # It's going to heko us create a url 
 
 urlpatterns = [
     path('admin/', admin.site.urls), # We cannot access it until we have the database ready
-    path('', include('projects.urls'))
+    path('projects/', include('projects.urls')),
+    path('', include('users.urls'))
 ]
 
 

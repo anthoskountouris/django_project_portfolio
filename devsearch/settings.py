@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'projects.apps.ProjectsConfig' # We configure the projects app. We can fins this in the apps.py file in the app folder.
+    'projects.apps.ProjectsConfig', # We configure the projects app. We can fins this in the apps.py file in the app folder.
+    'users.apps.UsersConfig'
 ]
 
 MIDDLEWARE = [
