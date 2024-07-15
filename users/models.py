@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid #16 char string of numbers and letters
 
+
+
 # Create your models here.
 
 class Profile(models.Model):
@@ -25,7 +27,7 @@ class Profile(models.Model):
     
     
     def __str__(self):
-        return str(self.user.username)
+        return str(self.username)
     
 
 class Skill(models.Model):
@@ -38,3 +40,10 @@ class Skill(models.Model):
     
     def __str__(self):
         return str(self.name)
+    
+
+# receiver of dignal:
+# sender is gonna be the model that actuallt sends this
+# instance of the model that triggers this
+# created will let us know of the user was added, or if a model was added to the db
+
