@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect # Allow us to render the templates
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from .models import Project # Adding the model
 from .forms import ProjectForm # Adding the form
 
@@ -30,6 +31,7 @@ def project(request, pk):
     context = {'project' : projectsObj}
     return render(request, 'projects/single-project.html', context)
 
+@login_required(login_url="login") 
 def updateProject(request, pk):
     project = Project.objects.get(id=pk)
     form = ProjectForm(instance=project) ## instansiate the form
@@ -46,7 +48,7 @@ def updateProject(request, pk):
     context = {'form' : form}
     return render(request, 'projects/project_form.html', context)
 
-
+@login_required(login_url="login") 
 def createProject(request):
     form = ProjectForm() ## instansiate the form
 
@@ -62,7 +64,7 @@ def createProject(request):
     context = {'form' : form}
     return render(request, 'projects/project_form.html', context)
 
-
+@login_required(login_url="login") 
 def deleteProject(request, pk):
     project = Project.objects.get(id=pk)
 
