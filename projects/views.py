@@ -33,7 +33,9 @@ def project(request, pk):
 
 @login_required(login_url="login") 
 def updateProject(request, pk):
-    project = Project.objects.get(id=pk)
+    profile = request.user.profile # we get the profile of the logged in user
+    project = profile.project_set.get(id=pk) # we are querying only that users projects, we are getting all the chldren/projects
+
     form = ProjectForm(instance=project) ## instansiate the form
 
     # We check what method it was
@@ -50,6 +52,8 @@ def updateProject(request, pk):
 
 @login_required(login_url="login") 
 def createProject(request):
+    profile = request.user.profile
+
     form = ProjectForm() ## instansiate the form
 
     # We check what method it was
@@ -57,7 +61,10 @@ def createProject(request):
         form = ProjectForm(request.POST, request.FILES)
         # print(request.POST)
         if form.is_valid(): # We check if the data and form are validate
-            form.save()
+            project = form.save(commit = False) # Gives us an instance of the current project and then we can go and update that project attribure
+            project.owner = profile # and then we can go and update that project attribure
+            project.save() # and then we save again
+        
             return redirect('projects')
         
 
@@ -66,7 +73,8 @@ def createProject(request):
 
 @login_required(login_url="login") 
 def deleteProject(request, pk):
-    project = Project.objects.get(id=pk)
+    profile = request.user.profile
+    project = profile.project_set.get(id=pk)
 
     if request.method == 'POST':
         project.delete()
