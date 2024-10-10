@@ -44,7 +44,7 @@ def updateProject(request, pk):
         # print(request.POST)
         if form.is_valid(): # We check if the data and form are validate
             form.save()
-            return redirect('projects')
+            return redirect('account')
         
 
     context = {'form' : form}
@@ -65,7 +65,7 @@ def createProject(request):
             project.owner = profile # and then we can go and update that project attribure
             project.save() # and then we save again
         
-            return redirect('projects')
+            return redirect('account')
         
 
     context = {'form' : form}
@@ -78,7 +78,7 @@ def deleteProject(request, pk):
 
     if request.method == 'POST':
         project.delete()
-        return redirect('projects')
+        return redirect('account')
     
     context = {'object':project}
-    return render(request, 'projects/delete_template.html', context)
+    return render(request, 'delete_template.html', context)
