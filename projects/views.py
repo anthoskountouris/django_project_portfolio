@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Project # Adding the model
 from .forms import ProjectForm # Adding the form
+from .utils import searchProjects
 
 # projectsList = [
 #     {'id':'1',
@@ -20,8 +21,8 @@ from .forms import ProjectForm # Adding the form
 # ]
 
 def projects(request):
-    projects = Project.objects.all()
-    context = {'projects' : projects}
+    projects, search_query = searchProjects(request)
+    context = {'projects' : projects, 'search_query': search_query}
     # return HttpResponse("Here are our projects")
     return render(request, 'projects/projects.html', context)
     
