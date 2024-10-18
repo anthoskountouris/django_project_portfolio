@@ -19,6 +19,9 @@ class Project(models.Model):
     
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ['created'] # ordering, use - infront for descending
     
 
 class Review(models.Model):

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Project # Adding the model
 from .forms import ProjectForm # Adding the form
-from .utils import searchProjects
+from .utils import searchProjects, paginateProjects
 
 # projectsList = [
 #     {'id':'1',
@@ -22,8 +22,11 @@ from .utils import searchProjects
 
 def projects(request):
     projects, search_query = searchProjects(request)
-    context = {'projects' : projects, 'search_query': search_query}
-    # return HttpResponse("Here are our projects")
+
+    customRange, projects = paginateProjects(request, projects, 3) # number of results we want
+
+    context = {'projects' : projects, 'search_query': search_query, 'customRange' : customRange}
+
     return render(request, 'projects/projects.html', context)
     
 
