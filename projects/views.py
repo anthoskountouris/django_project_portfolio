@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect # Allow us to render the templates
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Project # Adding the model
-from .forms import ProjectForm # Adding the form
+from .forms import ProjectForm, ReviewForm # Adding the forms
 from .utils import searchProjects, paginateProjects
 
 # projectsList = [
@@ -22,17 +23,30 @@ from .utils import searchProjects, paginateProjects
 
 def projects(request):
     projects, search_query = searchProjects(request)
-
     customRange, projects = paginateProjects(request, projects, 6) # number of results we want
-
     context = {'projects' : projects, 'search_query': search_query, 'customRange' : customRange}
-
     return render(request, 'projects/projects.html', context)
     
 
 def project(request, pk):
-    projectsObj = Project.objects.get(id=pk)
-    context = {'project' : projectsObj}
+    projectObj = Project.objects.get(id=pk)
+    reviews = projectObj.review_set.all
+    form = ReviewForm() ## instansiate the form
+
+    if request.method == 'POST': 
+        form = ReviewForm(request.POST)
+        review = form.save(commit=False)
+        review.project = projectObj
+        review.owner = request.user.profile
+        if form.is_valid(): # We check if the data and form are validate
+            form.save()
+        
+        projectObj.getVoteCount # getting votes
+        
+        messages.success(request, 'Your review was successfullt submitted')
+        return redirect('project', pk=projectObj.id)
+
+    context = {'project' : projectObj, "reviews": reviews, 'form': form}
     return render(request, 'projects/single-project.html', context)
 
 @login_required(login_url="login") 
