@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls), # We cannot access it until we have the database ready
     path('projects/', include('projects.urls')),
     path('', include('users.urls')),
+    path('api/', include('api.urls')),
 
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name="password_reset.html"),
          name = "password_reset"), # user submits emai for reset

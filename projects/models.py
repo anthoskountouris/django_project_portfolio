@@ -62,7 +62,7 @@ class Review(models.Model):
     
 
 class Tag(models.Model):
-      #owner = 
+      # owner = 
     name = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add = True)
     id = models.UUIDField(default = uuid.uuid4, unique = True, 
