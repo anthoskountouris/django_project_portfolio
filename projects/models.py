@@ -3,7 +3,7 @@ import uuid #16 char string of numbers and letters
 from users.models import Profile
 
 class Project(models.Model):
-    owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL) # many to one relationship
+    owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.CASCADE) # many to one relationship
     title = models.CharField(max_length=200)
     description = models.TextField(null = True, blank=True) # Can leave it empty (database, django) to know
     featured_image = models.ImageField(
@@ -22,6 +22,14 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-vote_ratio', '-vote_total', 'title'] # ordering, use - infront for descending
+
+    @property
+    def imageUrl(self):
+        try:
+            url = self.featured_image.url
+        except:
+            url = ''
+        return url
 
     @property
     def reviewers(self):

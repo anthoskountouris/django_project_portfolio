@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect # Allow us to render the templates
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Project # Adding the model
+from .models import Project, Tag # Adding the model
 from .forms import ProjectForm, ReviewForm # Adding the forms
 from .utils import searchProjects, paginateProjects
 
@@ -58,10 +58,16 @@ def updateProject(request, pk):
 
     # We check what method it was
     if request.method == 'POST':
+        newtags:list[str] = request.POST.get('newtags').replace(','," ").split()
+
         form = ProjectForm(request.POST, request.FILES, instance=project)
         # print(request.POST)
         if form.is_valid(): # We check if the data and form are validate
-            form.save()
+            project = form.save()
+
+            for tag in newtags:
+                tag, created = Tag.objects.get_or_create(name=tag) # if tag already exists don't add it
+                project.tags.add(tag) # accessing the many to many relationship
             return redirect('account')
         
 
@@ -76,6 +82,8 @@ def createProject(request):
 
     # We check what method it was
     if request.method == 'POST':
+        newtags:list[str] = request.POST.get('newtags').replace(','," ").split()
+
         form = ProjectForm(request.POST, request.FILES)
         # print(request.POST)
         if form.is_valid(): # We check if the data and form are validate
@@ -83,6 +91,10 @@ def createProject(request):
             project.owner = profile # and then we can go and update that project attribure
             project.save() # and then we save again
         
+            for tag in newtags:
+                tag, created = Tag.objects.get_or_create(name=tag) # if tag already exists don't add it
+                project.tags.add(tag) # accessing the many to many relationship
+                
             return redirect('account')
         
 

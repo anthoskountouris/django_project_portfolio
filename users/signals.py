@@ -43,9 +43,11 @@ def updateUser(sender, instance, created, **kwargs):
         user.save()
 
 def deleteUser(sender, instance, **kwargs):
-    print("Delete user signal triggered!")
-    user = instance.user # it's .user because that's how we get a 1-1 relationship
-    user.delete()
+    try:
+        user = instance.user # it's .user because that's how we get a 1-1 relationship
+        user.delete()
+    except:
+        pass
 
 post_save.connect(createProfile, sender=User)
 post_save.connect(updateUser, sender=Profile) # After our ptofile is updated we want to update the used.
