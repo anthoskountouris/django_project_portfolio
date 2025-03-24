@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import ProjectSerializer
-from projects.models import Project, Review
+from projects.models import Project, Review, Tag
 
 # All the routes that we're gonna have in our api
 '''Json web tokens have an expiration date so when a user's token expires
@@ -55,3 +55,15 @@ def projectVote(request, pk):
 
     serializer = ProjectSerializer(project, many=False) # This turns our python data and converts it into json data
     return Response(serializer.data)
+
+@api_view(['DELETE'])
+def removeTag(request):
+    tagId = request.data['tag']
+    projectId = request.data['project']
+
+    project = Project.objects.get(id = projectId)
+    tag = Tag.objects.get(id = tagId)
+
+    project.tags.remove(tag)
+
+    return Response('Tag was removed')
